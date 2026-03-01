@@ -31,6 +31,17 @@ Features a built-in **DOTA2 Hero Voice Pack system**. Every critical task milest
 
 ---
 
+## 📺 Video Demonstration
+<!-- Video Demo Placeholder -->
+<div align="center">
+  <video src="images/demo_video.mp4" width="100%" controls>
+    Your browser does not support the video tag.
+  </video>
+  <p><em>(Demo: Watch Multi-Agent orchestration and DOTA2 voice interaction in action)</em></p>
+</div>
+
+---
+
 ## 🛠️ Multi-Agent Interaction Protocol (Nexus Protocol V2.1)
 
 To achieve seamless synergy, this project defines a strict communication protocol that every connected agent must follow:

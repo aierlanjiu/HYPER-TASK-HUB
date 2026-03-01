@@ -31,6 +31,17 @@
 
 ---
 
+## 📺 视频演示 (Video Demo)
+<!-- 视频演示位占位 -->
+<div align="center">
+  <video src="images/demo_video.mp4" width="100%" controls>
+    您的浏览器不支持 video 标签。
+  </video>
+  <p><em>(演示视频：展示多 Agent 协同及 DOTA2 语音交互实感)</em></p>
+</div>
+
+---
+
 ## 🛠️ 全 Agent 交互协议 (Nexus Protocol V2.1)
 
 为了实现智体间的无缝协同，本项目定义了一套严格的通讯协议，任何接入的特工必须遵守：
