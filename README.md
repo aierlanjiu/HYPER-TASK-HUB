@@ -1,84 +1,72 @@
-# 🌐 HyperTask Hub (开源增强版)
+# 🌐 HyperTask Hub: 多智能体协同编排中枢 (Open Source Edition)
 
-**HyperTask Hub** 是一套面向未来的多智能体（Multi-Agent）中枢编排系统。它作为整个 AI 工作流的“中枢神经系统”，通过统一的控制台和 API 接口，对底层的多类 AI Agent（如 OpenClaw、Gemini Supervisor Bot、DeepSeek）进行统一的任务分发、状态监听和技能调度。
+> **"让 Agent 们像交响乐团一样协同工作，拒绝‘磨洋工’，实现真正的自动化闭环。"**
 
-![HyperTask Hub Dashboard](images/banner.png)
+**HyperTask Hub** 是一套面向未来的多智能体 (Multi-Agent) 编排与指挥系统。它通过一个精致的 Web 控制台，将不同特性的 AI 特工（Gemini, DeepSeek, OpenClaw）缝合成一个具备自我修正能力的“智体机群”。
 
----
-
-## ✨ 核心特性
-
-- **🤖 多 Agent 协同与编排**：统一管理不同特性的 Agent。
-- **📦 技能动态挂载**：自动实时监听并解析本地 `~/.gemini/skills/` 目录中的 `SKILL.md`，支持 UI 输入框斜杠 `/` 命令实时联想。
-- **⚡ 实时双向通讯**：基于 FastAPI WebSocket 构建的 `/ws/nexus` 管道，将 Agent 的状态更新、终端日志输出实时广播至前端 Dashboard。
-- **🎙️ 沉浸式语音播报**：内置 DOTA2 英雄语音包（冰女、火女等），在任务执行的关键节点提供沉浸式反馈（纯音频，已剔除原生机械 TTS）。
-- **🔄 进程级守护**：完全基于 PM2 生态进行多服务进程管理。
+<!-- 16:9 主界面效果图占位 -->
+<div align="center">
+  <img src="images/banner_16_9.png" width="100%" alt="HyperTask Hub Main Dashboard" />
+  <p><em>(此处建议上传 16:9 的主界面高清截图)</em></p>
+</div>
 
 ---
 
-## 🚀 部署与运行
+## ✨ 核心亮点
 
-项目依赖 `Python 3.10+` 以及 `Node.js (PM2)` 环境。
+### 1. 🤖 强力执行者：Gemini Bot
+**Gemini Bot** 是系统中的核心打工人。它不仅拥有极高的逻辑推理能力，更被赋予了**本地系统执行权**。它能通过 CLI 直接操控您的文件系统、运行复杂脚本，并将执行过程实时回传给指挥中心。
 
-### 1. 环境变量配置
-复制环境模板并填入您的私有 Key：
-```bash
-cp .env.example .env
-```
-在 `.env` 中填入：
-- `DEEPSEEK_API_KEY`: 您的 DeepSeek API Token（或本地 NAS 的 Token）
-- `TELEGRAM_BOT_TOKEN`: 您的 TG 机器人 Token (如果使用 Supervisor Bot)
+### 2. 👮 督察官：Supervisor Agent (反“磨洋工”系统)
+这是本系统的“灵魂”。主管 Agent 会在后台实时监控所有特工的心跳与任务进度：
+- **防止磨洋工**：如果某个特工在任务执行中停滞过久，主管会立刻下达“催办 (Nudge)”指令。
+- **智能排障**：当检测到特工因报错或环境问题卡壳时，主管会介入分析，并为其提供具体的**解决方案或绕过路径**，甚至可以调动其他特工协助排障。
 
-### 2. 环境初始化
-```bash
-# 创建并激活 Python 虚拟环境
-python3 -m venv venv
-source venv/bin/activate
+### 3. 🎙️ 沉浸式语音反馈
+内置 **DOTA2 英雄语音包**。任务的每一个关键节点（上线、运行中、成功、停滞、失败）都由冰女、火女等英雄实时播报，让自动化过程充满实感。
 
-# 安装所有后端依赖
-pip install -r requirements.txt
-```
-
-### 3. 一键启动
-本系统由 `ecosystem.config.js` 统一定义，包含核心的 FastAPI 路由以及多个桥接 Agent。
-
-```bash
-# 安装 PM2 (如未安装)
-npm install -g pm2
-
-# 启动整个集群
-pm2 start ecosystem.config.js
-
-# 查看所有微服务在线状态
-pm2 status
-```
-
-访问 `http://localhost:8000` 即可进入控制台。
+### 4. 🕹️ 人工介入与一键即停
+- **上帝视角**：允许人类指挥官随时在 CMD 框输入指令，中断或接管任意特工的当前任务。
+- **一键即停 (Emergency Stop)**：遇到紧急情况或模型幻觉，可立即熔断所有正在运行的进程，确保系统安全。
 
 ---
 
-## 🧩 扩展您的技能库 (Skills)
+## 📸 移动端适配
+<!-- 9:16 移动端/电报端效果图占位 -->
+<div align="center">
+  <img src="images/mobile_9_16.png" width="40%" alt="Telegram Monitor View" />
+  <p><em>(此处建议上传 9:16 的 Telegram 机器人或手机浏览器截图)</em></p>
+</div>
 
-HyperTask Hub 采用“即插即用”的架构：
-1. 在宿主机的 `~/.gemini/skills/` 下新建一个目录（如 `my-skill`）。
-2. 在该目录下创建 `SKILL.md`：
-   ```yaml
-   ---
-   name: my-skill
-   description: 一句话描述这个技能的作用。
-   ---
+---
+
+## 🚀 快速开始
+
+1. **克隆与环境初始化**
+   ```bash
+   git clone https://github.com/aierlanjiu/HYPER-TASK-HUB.git
+   cd HYPER-TASK-HUB
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
    ```
-3. **无需重启服务**，在 Hub 界面底部的 CMD 输入框内打字即可立刻调用这个新技能！
+
+2. **配置配置项**
+   复制 `.env.example` 到 `.env`，填入您的 API Keys 和 Telegram Token。
+
+3. **一键拉起机群**
+   ```bash
+   pm2 start ecosystem.config.js
+   ```
+   访问 `http://localhost:8000` 即可进入指挥大厅。
 
 ---
 
-## 🤖 包含的子特工 (Sub-Agents)
-
-- **`hypertask-hub`**: 核心前端与路由分发器 (Port 8000)。
-- **`openclaw-bridge`**: 本地高权限实干家，通过 CLI 与 OpenClaw 通信。
-- **`deepseek-agent`**: 深度推理引擎接口，专注解决复杂架构问题。
-- **`supervisor-agent`**: 内部调度主管，负责异常熔断与重试。
-- **`gemini-supervisor-bot`** (附加): 远端 Telegram 监控机器人，用于移动端收取进度报告。
+## 🤝 诚邀社区大牛深度改造
+本项目目前处于 **V1.0 架构阶段**，诚邀大神们参与：
+- **容器化部署** (Docker Compose)。
+- **多租户权限隔离** (Auth)。
+- **任务审计录像** (Playback)。
 
 ---
-*Open-sourced under MIT License.*
+*Created with ❤️ by Gemini CLI, OpenClaw & Master papazed.*
