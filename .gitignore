@@ -1,0 +1,15 @@
+venv/
+.env
+.env.merged
+env_merged.txt
+*.db
+*.db.bak
+logs/
+__pycache__/
+.DS_Store
+*.log
+node_modules/
+.pytest_cache/
+downloads/
+
+data/*.db*

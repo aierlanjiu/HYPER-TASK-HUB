@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HyperTask Hub - UI/UX Pro Max (Light Mode)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: 'var(--brand-primary)',
+                            secondary: 'var(--brand-secondary)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+        :root {
+            --brand-primary: #1c1917;
+            --brand-accent: #c2410c;
+            --bg-base: #faf5f0;
+            --panel-bg: rgba(255, 252, 248, 0.88);
+            --glass-bg: rgba(255, 252, 248, 0.7);
+            --glass-border: rgba(180, 120, 60, 0.08);
+            --glass-shadow: 0 8px 32px rgba(120, 60, 0, 0.04);
+            --text-main: #1c1917;
+            --text-muted: #78716c;
+        }
+
+        .dark {
+            --brand-primary: #f8fafc;
+            --brand-accent: #38bdf8;
+            --bg-base: #020617;
+            --panel-bg: rgba(15, 23, 42, 0.65);
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.5);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: url('/images/bg-day.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+            position: relative;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .dark body {
+            background-image: url('/images/bg-night.png');
+        }
+
+        .glass-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
+            animation: morph 25s ease-in-out infinite alternate;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: -5%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(194, 65, 12, 0.06) 0%, transparent 70%);
+        }
+
+        .blob-2 {
+            bottom: -15%;
+            right: -5%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(180, 83, 9, 0.05) 0%, transparent 70%);
+        }
+
+        .dark .blob-1 {
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+        }
+
+        .dark .blob-2 {
+            background: radial-gradient(circle, rgba(94, 92, 230, 0.1) 0%, transparent 70%);
+        }
+
+        @keyframes morph {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(3%, 3%) scale(1.05) rotate(5deg);
+            }
+        }
+
+        .bento-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .bento-panel:hover {
+            box-shadow: 0 12px 40px rgba(120, 60, 0, 0.06);
+            border-color: rgba(194, 65, 12, 0.12);
+        }
+
+        .dark .bento-panel:hover {
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 12px 40px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .agent-card {
+            background: rgba(255, 252, 248, 0.9);
+            border: 1px solid rgba(180, 120, 60, 0.06);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-style: preserve-3d;
+        }
+
+        .dark .agent-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .agent-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(120, 60, 0, 0.05);
+            border-color: var(--brand-accent);
+            transform: scale(1.02) translateY(-2px) perspective(1000px) rotateX(2deg);
+        }
+
+        .dark .agent-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .agent-active {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--brand-accent);
+            box-shadow: 0 8px 24px rgba(194, 65, 12, 0.1);
+        }
+
+        .dark .agent-active {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
+        }
+
+        .skill-btn {
+            background: rgba(255, 248, 240, 0.8);
+            border: 1px solid rgba(180, 120, 60, 0.06);
+            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            font-weight: 500;
+        }
+
+        .dark .skill-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-btn:hover {
+            background: var(--brand-accent);
+            color: #ffffff !important;
+            transform: scale(1.02) translateY(-1px);
+        }
+
+        .dark .skill-btn:hover {
+            background: rgba(56, 189, 248, 0.8);
+        }
+
+        #cmd-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .log-item {
+            border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+            padding: 8px 0;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .pro-label {
+            background: linear-gradient(135deg, #ea580c, #d97706);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .dark .pro-label {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        .animate-scanline {
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, #78716c 25%, #1c1917 50%, #78716c 75%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .dark .shimmer-text {
+            background: linear-gradient(90deg, #94a3b8 25%, #f8fafc 50%, #94a3b8 75%);
+            background-size: 200% auto;
+        }
+
+        .shimmer-bar {
+            background: linear-gradient(90deg, rgba(194, 65, 12, 0.2) 25%, rgba(194, 65, 12, 0.7) 50%, rgba(194, 65, 12, 0.2) 75%);
+            background-size: 200% auto;
+            animation: shimmer 1.5s linear infinite;
+        }
+
+        .dark .shimmer-bar {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 25%, rgba(56, 189, 248, 0.5) 50%, rgba(56, 189, 248, 0.1) 75%);
+            background-size: 200% auto;
+        }
+
+        /* ===== DOTA2 Voice Pack Hero Cards ===== */
+        .hero-voice-card {
+            border-radius: 20px;
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .hero-voice-inner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: 20px;
+            background: rgba(255, 252, 248, 0.9);
+            border: 2px solid rgba(180, 120, 60, 0.06);
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .dark .hero-voice-inner {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .hero-voice-card:hover .hero-voice-inner {
+            border-color: var(--hero-color);
+            box-shadow: 0 8px 28px var(--hero-glow);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .hero-voice-active .hero-voice-inner {
+            border-color: var(--hero-color) !important;
+            box-shadow: 0 6px 24px var(--hero-glow), inset 0 0 0 1px var(--hero-color) !important;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,252,248,0.85));
+        }
+
+        .dark .hero-voice-active .hero-voice-inner {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+        }
+
+        .hero-voice-avatar-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.03), rgba(0,0,0,0.08));
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .dark .hero-voice-avatar-wrap {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+        }
+
+        .hero-voice-active .hero-voice-avatar-wrap {
+            border-color: var(--hero-color);
+        }
+
+        .hero-voice-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-voice-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: #86868b;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-voice-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-voice-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1d1d1f;
+            line-height: 1.3;
+            transition: color 0.3s;
+        }
+
+        .dark .hero-voice-name {
+            color: #f8fafc;
+        }
+
+        .hero-voice-active .hero-voice-name {
+            color: var(--hero-color);
+        }
+
+        .hero-voice-name-en {
+            font-size: 10px;
+            font-weight: 600;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 2px;
+        }
+
+        .dark .hero-voice-name-en {
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 dark:text-slate-200 h-screen w-full flex justify-center overflow-x-hidden">
+    <!-- Ambient Decorations -->
+    <div class="glass-blob blob-1"></div>
+    <div class="glass-blob blob-2"></div>
+
+    <!-- Main Wrapper (Acts as the old body, limits width safely) -->
+    <div class="w-full max-w-[1600px] h-full flex flex-col p-4 md:p-8 relative z-10">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 shrink-0">
+            <div class="flex items-center space-x-4">
+                <h1
+                    class="text-2xl md:text-3xl font-bold tracking-tight text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500">
+                    HYPER-TASK HUB <span class="pro-label text-sm align-top ml-1">PRO</span></h1>
+                <div class="h-6 w-[1px] bg-gray-200 dark:bg-white/10 hidden md:block"></div>
+                <span
+                    class="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#86868b] dark:text-slate-400 font-semibold">Design
+                    Intelligence</span>
+            </div>
+            <div
+                class="flex flex-wrap gap-2 md:gap-4 text-[10px] md:text-[11px] font-semibold text-stone-500 dark:text-slate-400 items-center bg-stone-50/60 dark:bg-slate-900/60 transition-colors duration-500 backdrop-blur-xl px-5 py-2.5 rounded-2xl border border-stone-200/50 dark:border-white/5 shadow-sm">
+
+                <div id="theme-toggle"
+                    class="flex items-center cursor-pointer hover:text-blue-600 transition-colors group px-3 py-1.5 rounded-xl border border-transparent dark:hover:border-white/10"
+                    onclick="toggleTheme()">
+                    <i data-lucide="moon" class="w-4 h-4 mr-2 text-slate-400 dark:text-amber-400 block dark:hidden"></i>
+                    <i data-lucide="sun" class="w-4 h-4 mr-2 text-amber-400 hidden dark:block"></i>
+                    <span class="text-xs font-bold text-slate-500 dark:text-amber-500/80">主题选择</span>
+                </div>
+                <div class="h-3 w-[1px] bg-gray-200 dark:bg-slate-800 hidden md:block border-l"></div>
+                <div id="audit-toggle-container"
+                    class="flex items-center cursor-pointer hover:text-blue-600 transition-colors group"
+                    onclick="toggleAuditMode()">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 mr-1.5 text-blue-500"></i>
+                    <span id="audit-mode-label" class="mr-2">加载中...</span>
+                    <div id="audit-toggle-dot" class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                </div>
+                <div class="h-3 w-[1px] bg-gray-200 dark:bg-white/10 hidden md:block"></div>
+                <span class="flex items-center"><i data-lucide="activity"
+                        class="w-3.5 h-3.5 mr-1.5 text-emerald-500"></i>
+                    99.9% UPTIME</span>
+                <span class="flex items-center"><i data-lucide="cpu" class="w-3.5 h-3.5 mr-1.5 text-indigo-500"></i> MAC
+                    MINI CLUSTER</span>
+                <div class="h-3 w-[1px] bg-gray-200 dark:bg-white/10 hidden md:block"></div>
+                <div class="h-3 w-[1px] bg-gray-200 dark:bg-white/10 hidden md:block"></div>
+                <span id="target-id"
+                    class="text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500 flex items-center">
+                    <i data-lucide="crosshair" class="w-3.5 h-3.5 mr-1.5 text-blue-500"></i> TARGET: GLOBAL
+                </span>
+            </div>
+        </header>
+
+        <!-- Floating Voice Switcher -->
+        <div id="voice-toggle-btn" 
+             class="fixed bottom-24 right-8 z-[60] flex flex-col items-center group cursor-pointer"
+             onclick="toggleVoicePanel()">
+            <div class="relative">
+                <div id="voice-dot" class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-500 ring-2 ring-white dark:ring-slate-900 animate-pulse z-10"></div>
+                <div class="w-14 h-14 rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-amber-200/50 dark:border-white/10 shadow-2xl flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:rounded-[20px]">
+                    <img id="voice-avatar" src="" alt="" class="w-full h-full object-cover" style="display:none">
+                    <i id="voice-icon-fallback" data-lucide="mic-2" class="w-6 h-6 text-amber-600 dark:text-sky-400"></i>
+                </div>
+            </div>
+            <div class="mt-2 px-2 py-0.5 rounded-full bg-amber-100 dark:bg-sky-900/30 border border-amber-200/30 dark:border-sky-400/20 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span id="voice-label" class="text-[10px] font-black text-amber-700 dark:text-sky-300 uppercase tracking-widest">TTS Active</span>
+            </div>
+        </div>
+
+        <div
+            class="flex-1 overflow-y-auto lg:overflow-hidden flex flex-col lg:grid lg:grid-cols-12 gap-8 relative z-10 scrollbar-hide">
+            <!-- Sidebar: Agents & Tracks -->
+            <div class="lg:col-span-3 flex flex-col space-y-6 lg:h-full lg:overflow-hidden shrink-0">
+                <div class="bento-panel p-6 flex flex-col shrink-0">
+                    <h2
+                        class="text-[11px] font-bold text-[#86868b] dark:text-slate-400 uppercase mb-5 tracking-[0.15em] flex items-center">
+                        <i data-lucide="layout-grid" class="w-4 h-4 mr-2 text-blue-500"></i> Command Entities
+                    </h2>
+                    <div id="agent-list" class="space-y-3">
+                        <div onclick="switchAgent('supervisor')" id="agent-supervisor"
+                            class="agent-card agent-active p-4 cursor-pointer group relative overflow-hidden">
+                            <div class="flex justify-between items-center relative z-10">
+                                <span
+                                    class="text-sm font-bold flex items-center text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500"><i
+                                        data-lucide="shield-check" class="w-4 h-4 mr-2 text-blue-600"></i>
+                                    Supervisor</span>
+                                <span
+                                    class="agent-status-badge text-[9px] font-bold bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-full border border-blue-100 dark:border-blue-800/50 shadow-sm transition-colors">CORE</span>
+                            </div>
+                            <p class="text-[10px] text-[#86868b] dark:text-slate-400 mt-2 leading-relaxed">
+                                Auto Routing & Audit Protocol
+                            </p>
+                        </div>
+
+                        <div onclick="switchAgent('gemini-bot')" id="agent-gemini-bot"
+                            class="agent-card p-4 cursor-pointer group relative overflow-hidden">
+                            <div class="flex justify-between items-center relative z-10">
+                                <span
+                                    class="text-sm font-bold flex items-center text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500"><i
+                                        data-lucide="bot" class="w-4 h-4 mr-2 text-indigo-500"></i> Gemini Bot</span>
+                                <span
+                                    class="agent-status-badge text-[9px] font-bold bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 px-2.5 py-1 rounded-full border border-gray-100 dark:border-white/5">STANDBY</span>
+                            </div>
+                        </div>
+
+                        <div onclick="switchAgent('openclaw-bridge')" id="agent-openclaw-bridge"
+                            class="agent-card p-4 cursor-pointer group relative overflow-hidden">
+                            <div class="flex justify-between items-center relative z-10">
+                                <span
+                                    class="text-sm font-bold flex items-center text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500"><i
+                                        data-lucide="brain-circuit" class="w-4 h-4 mr-2 text-rose-500"></i>
+                                    OpenClaw</span>
+                                <span
+                                    class="agent-status-badge text-[9px] font-bold bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 px-2.5 py-1 rounded-full border border-gray-100 dark:border-white/5">STANDBY</span>
+                            </div>
+                            <div class="agent-sessions hidden mt-4 flex flex-wrap gap-2 relative z-10 w-full">
+                                <button onclick="selectSession('openclaw-bridge', 'main', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">Main</button>
+                                <button onclick="selectSession('openclaw-bridge', 'fe-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">FE</button>
+                                <button onclick="selectSession('openclaw-bridge', 'be-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">BE</button>
+                                <button onclick="selectSession('openclaw-bridge', 'art-director', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">Art</button>
+                                <button onclick="selectSession('openclaw-bridge', 'qa-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">QA</button>
+                                <button onclick="selectSession('openclaw-bridge', 'security-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">Security</button>
+                                <button onclick="selectSession('openclaw-bridge', 'growth-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">Growth</button>
+                                <button onclick="selectSession('openclaw-bridge', 'finance-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">Finance</button>
+                                <button onclick="selectSession('openclaw-bridge', 'news-expert', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">News</button>
+                            </div>
+                        </div>
+
+                        <div onclick="switchAgent('deepseek-nas')" id="agent-deepseek-nas"
+                            class="agent-card p-4 cursor-pointer group relative overflow-hidden">
+                            <div class="flex justify-between items-center relative z-10">
+                                <span
+                                    class="text-sm font-bold flex items-center text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500"><i
+                                        data-lucide="network" class="w-4 h-4 mr-2 text-sky-500"></i> DeepSeek</span>
+                                <span
+                                    class="agent-status-badge text-[9px] font-bold bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 px-2.5 py-1 rounded-full border border-gray-100 dark:border-white/5">READY</span>
+                            </div>
+                            <div class="agent-sessions hidden mt-4 flex flex-wrap gap-2 relative z-10 w-full">
+                                <button onclick="selectSession('deepseek-nas', 'deepseek-reasoner', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">R1</button>
+                                <button onclick="selectSession('deepseek-nas', 'deepseek-chat', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">V3</button>
+                                <button onclick="selectSession('deepseek-nas', 'deepseek-reasoner-search', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">R1-S</button>
+                                <button onclick="selectSession('deepseek-nas', 'deepseek-chat-search', event)"
+                                    class="session-btn text-[9px] font-bold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-800/40 transition-colors duration-500 text-[#86868b] dark:text-slate-400 border border-gray-100 dark:border-white/5 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all uppercase tracking-wider shadow-sm">V3-S</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Capsules Trigger -->
+                <div onclick="toggleSkillPanel()"
+                    class="bento-panel p-5 flex items-center justify-between cursor-pointer hover:border-blue-400 transition-all group shrink-0">
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mr-4 shadow-lg shadow-blue-200 group-hover:shadow-blue-300 transition-all">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h2
+                                class="text-[13px] font-bold text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500">
+                                Skill Capsules</h2>
+                            <p id="skill-count-label" class="text-[10px] text-[#86868b] dark:text-slate-400">Loading
+                                library...</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right"
+                        class="w-5 h-5 text-gray-300 group-hover:text-blue-500 transition-colors"></i>
+                </div>
+            </div>
+
+            <!-- Main Workspace -->
+            <div
+                class="lg:col-span-6 flex flex-col space-y-6 flex-1 min-h-[500px] lg:h-full lg:overflow-hidden shrink-0">
+                <div class="bento-panel flex-1 flex flex-col overflow-hidden relative">
+                    <div
+                        class="p-6 border-b border-gray-50 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-slate-800/20 transition-colors duration-500">
+                        <div class="flex items-center space-x-3">
+                            <span
+                                class="text-[11px] font-bold text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500 flex items-center tracking-wider uppercase"><i
+                                    data-lucide="layers" class="w-4 h-4 mr-2 text-blue-500"></i> Active Pipeline</span>
+                            <button onclick="clearAllTasks()"
+                                class="cursor-pointer text-[10px] bg-red-50 text-red-600 border border-red-100 px-4 py-1.5 rounded-full hover:bg-red-600 hover:text-white transition-all font-bold uppercase tracking-widest shadow-sm flex items-center">
+                                <i data-lucide="stop-circle" class="w-3.5 h-3.5 mr-1.5"></i> Halt
+                            </button>
+                        </div>
+                        <span
+                            class="text-[10px] text-[#86868b] dark:text-slate-400 font-semibold tracking-widest">SECURE
+                            CHANNEL</span>
+                    </div>
+
+                    <div id="task-list" class="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide relative z-10">
+                        <!-- Cards injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Command Bar -->
+                <div class="relative">
+                    <div
+                        class="h-24 bento-panel p-2 flex items-center relative overflow-hidden group focus-within:ring-4 focus-within:ring-orange-50 dark:focus-within:ring-blue-950 focus-within:border-amber-400 dark:focus-within:border-blue-400 transition-all">
+                        <i data-lucide="terminal" class="w-6 h-6 mx-5 text-amber-600 dark:text-blue-500"></i>
+                        <input type="text" id="cmd-input" placeholder="Execute directive..."
+                            class="bg-transparent w-full text-base font-medium focus:outline-none text-[#1c1917] dark:text-slate-50 transition-colors duration-500 placeholder:text-stone-400 dark:placeholder:text-slate-500"
+                            autocomplete="off">
+                    </div>
+                    <!-- Skill Suggestion Dropdown -->
+                    <div id="cmd-suggestions" class="absolute left-0 right-0 bottom-full mb-2 z-50 hidden">
+                        <div
+                            class="bento-panel p-2 max-h-64 overflow-y-auto scrollbar-hide shadow-[0_-8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_-8px_32px_rgba(0,0,0,0.4)]">
+                            <div id="cmd-suggestions-list" class="space-y-0.5 flex flex-col-reverse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Logs -->
+            <div class="lg:col-span-3 bento-panel flex flex-col min-h-[400px] lg:h-full lg:overflow-hidden shrink-0">
+                <div
+                    class="p-6 border-b border-gray-50 dark:border-white/5 bg-gray-50 dark:bg-slate-800/20 transition-colors duration-500">
+                    <span
+                        class="text-[11px] font-bold text-[#86868b] dark:text-slate-400 uppercase tracking-[0.15em] flex items-center">
+                        <i data-lucide="activity" class="w-4 h-4 mr-2 text-blue-500"></i> Live Telemetry
+                    </span>
+                </div>
+                <div id="logs"
+                    class="flex-1 overflow-y-auto p-6 text-[11px] space-y-4 font-mono leading-relaxed text-[#424245] dark:text-slate-300 transition-colors duration-500 scrollbar-hide">
+                    <!-- Logs injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Main Wrapper -->
+
+    <!-- Skill Panel Overlay -->
+    <div id="skill-panel-overlay" class="fixed inset-0 z-50 transition-opacity duration-300"
+        style="display: none; opacity: 0;">
+        <div onclick="toggleSkillPanel()"
+            class="absolute inset-0 bg-black/20 dark:bg-black/60 backdrop-blur-xl transition-all duration-500">
+        </div>
+        <div id="skill-panel"
+            class="absolute bottom-0 left-0 right-0 max-h-[85vh] bg-amber-50/80 dark:bg-slate-900/80 backdrop-blur-2xl border-t border-amber-200/30 dark:border-white/10 rounded-t-[40px] shadow-2xl transform translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col overflow-hidden">
+
+            <!-- Panel Header -->
+            <div class="flex items-center justify-between px-10 pt-8 pb-4 shrink-0">
+                <div class="flex items-center space-x-5">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 dark:shadow-blue-500/10">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1d1d1f] dark:text-slate-50 transition-colors">Skill Capsules
+                        </h2>
+                        <p id="skill-panel-count" class="text-xs text-[#86868b] dark:text-slate-400 transition-colors">
+                            Loading library...</p>
+                    </div>
+                </div>
+                <button onclick="toggleSkillPanel()"
+                    class="w-12 h-12 rounded-2xl bg-gray-100/80 dark:bg-slate-800/60 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-all backdrop-blur-sm">
+                    <i data-lucide="x" class="w-6 h-6 text-[#86868b] dark:text-slate-400"></i>
+                </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="px-10 pb-4 shrink-0">
+                <div class="relative">
+                    <i data-lucide="search"
+                        class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#86868b] dark:text-slate-500"></i>
+                    <input type="text" id="skill-search-input" placeholder="搜索技能..."
+                        class="w-full pl-11 pr-4 py-3 rounded-2xl bg-amber-100/40 dark:bg-slate-800/60 backdrop-blur-sm border border-amber-200/40 dark:border-white/5 text-sm font-medium text-stone-800 dark:text-slate-50 placeholder:text-stone-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 dark:focus:ring-blue-500/30 focus:border-amber-400 dark:focus:border-blue-400 transition-all"
+                        oninput="filterSkills(this.value)">
+                </div>
+            </div>
+
+            <!-- Hot Skills (Dynamic Recommendations) -->
+            <div id="skill-hot-section" class="px-10 pb-4 shrink-0">
+                <div class="flex items-center mb-3">
+                    <i data-lucide="flame" class="w-3.5 h-3.5 mr-1.5 text-orange-500"></i>
+                    <span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest">HOT SKILLS</span>
+                </div>
+                <div id="skill-hot-list" class="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+
+            <!-- Skill Grid -->
+            <div id="skill-directory"
+                class="flex-1 overflow-y-auto px-10 py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 scrollbar-hide">
+                <!-- Skills injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Immersive Halt Modal -->
+    <div id="immersive-halt-modal"
+        class="fixed inset-0 z-[100] pointer-events-none opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-white/90 dark:bg-slate-900/90 transition-colors duration-500 backdrop-blur-2xl">
+            <div class="absolute inset-0 h-1 bg-blue-500 animate-scanline"></div>
+        </div>
+        <div class="relative w-full h-full flex flex-col items-center justify-center p-8">
+            <i data-lucide="alert-circle" class="w-20 h-20 text-red-500 mb-6"></i>
+            <h1
+                class="text-4xl font-black text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500 uppercase tracking-wider mb-4">
+                SYSTEM HALT</h1>
+            <p class="text-[#86868b] dark:text-slate-400 text-center max-w-lg mb-10 font-medium">This will terminate all
+                active agent
+                pipelines and flush the execution state.</p>
+            <div class="flex space-x-4">
+                <button onclick="abortHalt()"
+                    class="px-8 py-3 rounded-2xl bg-gray-100 text-[#1d1d1f] dark:text-slate-50 transition-colors duration-500 font-bold hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition-all pointer-events-auto">Cancel</button>
+                <button onclick="executeHalt()"
+                    class="px-8 py-3 rounded-2xl bg-red-500 text-white font-bold hover:bg-red-600 transition-all pointer-events-auto shadow-lg shadow-red-200">Confirm
+                    Termination</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOTA2 Voice Pack Selector Panel -->
+    <div id="voice-panel-overlay" class="fixed inset-0 z-50 transition-opacity duration-300"
+        style="display: none; opacity: 0;">
+        <div onclick="toggleVoicePanel()"
+            class="absolute inset-0 bg-black/20 dark:bg-black/60 backdrop-blur-xl transition-all duration-500">
+        </div>
+        <div class="voice-panel-body absolute bottom-0 left-0 right-0 max-h-[70vh] bg-amber-50/90 dark:bg-slate-900/90 backdrop-blur-2xl border-t border-amber-200/30 dark:border-white/10 rounded-t-[40px] shadow-2xl transform translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col overflow-hidden">
+
+            <!-- Panel Header -->
+            <div class="flex items-center justify-between px-8 md:px-10 pt-8 pb-4 shrink-0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-rose-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                        <i data-lucide="swords" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1d1d1f] dark:text-slate-50">Voice Packs</h2>
+                        <p class="text-xs text-[#86868b] dark:text-slate-400">DOTA2 Hero Announcer</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="disableVoice()"
+                        class="text-[10px] font-bold px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-slate-800/60 text-gray-500 dark:text-slate-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-all border border-transparent hover:border-red-200 dark:hover:border-red-800/30">
+                        <i data-lucide="volume-x" class="w-3.5 h-3.5 inline mr-1"></i> MUTE
+                    </button>
+                    <button onclick="toggleVoicePanel()"
+                        class="w-10 h-10 rounded-2xl bg-gray-100/80 dark:bg-slate-800/60 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-all">
+                        <i data-lucide="x" class="w-5 h-5 text-[#86868b] dark:text-slate-400"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Grid -->
+            <div class="flex-1 overflow-y-auto px-8 md:px-10 py-6 scrollbar-hide">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+
+                    <!-- Crystal Maiden -->
+                    <div class="hero-voice-card group cursor-pointer" data-hero="cm" onclick="selectVoiceHero('cm')">
+                        <div class="hero-voice-inner" style="--hero-color: #4FC3F7; --hero-glow: rgba(79,195,247,0.25)">
+                            <div class="hero-voice-avatar-wrap">
+                                <img src="/images/heroes/cm.png" alt="Crystal Maiden" class="hero-voice-avatar"
+                                    onerror="this.parentElement.innerHTML='<div class=\'hero-voice-placeholder\'>CM</div>'">
+                            </div>
+                            <div class="hero-voice-info">
+                                <div class="hero-voice-name">冰女</div>
+                                <div class="hero-voice-name-en">Crystal Maiden</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drow Ranger -->
+                    <div class="hero-voice-card group cursor-pointer" data-hero="drow" onclick="selectVoiceHero('drow')">
+                        <div class="hero-voice-inner" style="--hero-color: #1565C0; --hero-glow: rgba(21,101,192,0.25)">
+                            <div class="hero-voice-avatar-wrap">
+                                <img src="/images/heroes/drow.png" alt="Drow Ranger" class="hero-voice-avatar"
+                                    onerror="this.parentElement.innerHTML='<div class=\'hero-voice-placeholder\'>DR</div>'">
+                            </div>
+                            <div class="hero-voice-info">
+                                <div class="hero-voice-name">小黑</div>
+                                <div class="hero-voice-name-en">Drow Ranger</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Faceless Void -->
+                    <div class="hero-voice-card group cursor-pointer" data-hero="void" onclick="selectVoiceHero('void')">
+                        <div class="hero-voice-inner" style="--hero-color: #7B2D8B; --hero-glow: rgba(123,45,139,0.25)">
+                            <div class="hero-voice-avatar-wrap">
+                                <img src="/images/heroes/void.png" alt="Faceless Void" class="hero-voice-avatar"
+                                    onerror="this.parentElement.innerHTML='<div class=\'hero-voice-placeholder\'>FV</div>'">
+                            </div>
+                            <div class="hero-voice-info">
+                                <div class="hero-voice-name">虚空</div>
+                                <div class="hero-voice-name-en">Faceless Void</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lina -->
+                    <div class="hero-voice-card group cursor-pointer" data-hero="lina" onclick="selectVoiceHero('lina')">
+                        <div class="hero-voice-inner" style="--hero-color: #E53935; --hero-glow: rgba(229,57,53,0.25)">
+                            <div class="hero-voice-avatar-wrap">
+                                <img src="/images/heroes/lina.png" alt="Lina" class="hero-voice-avatar"
+                                    onerror="this.parentElement.innerHTML='<div class=\'hero-voice-placeholder\'>LN</div>'">
+                            </div>
+                            <div class="hero-voice-info">
+                                <div class="hero-voice-name">火女</div>
+                                <div class="hero-voice-name-en">Lina</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Queen of Pain -->
+                    <div class="hero-voice-card group cursor-pointer" data-hero="qop" onclick="selectVoiceHero('qop')">
+                        <div class="hero-voice-inner" style="--hero-color: #AD1457; --hero-glow: rgba(173,20,87,0.25)">
+                            <div class="hero-voice-avatar-wrap">
+                                <img src="/images/heroes/qop.png" alt="Queen of Pain" class="hero-voice-avatar"
+                                    onerror="this.parentElement.innerHTML='<div class=\'hero-voice-placeholder\'>QP</div>'">
+                            </div>
+                            <div class="hero-voice-info">
+                                <div class="hero-voice-name">痛苦女王</div>
+                                <div class="hero-voice-name-en">Queen of Pain</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Templar Assassin -->
+                    <div class="hero-voice-card group cursor-pointer" data-hero="ta" onclick="selectVoiceHero('ta')">
+                        <div class="hero-voice-inner" style="--hero-color: #9C27B0; --hero-glow: rgba(156,39,176,0.25)">
+                            <div class="hero-voice-avatar-wrap">
+                                <img src="/images/heroes/ta.png" alt="Templar Assassin" class="hero-voice-avatar"
+                                    onerror="this.parentElement.innerHTML='<div class=\'hero-voice-placeholder\'>TA</div>'">
+                            </div>
+                            <div class="hero-voice-info">
+                                <div class="hero-voice-name">圣堂刺客</div>
+                                <div class="hero-voice-name-en">Templar Assassin</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>lucide.createIcons();</script>
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

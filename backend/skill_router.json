@@ -1,0 +1,21 @@
+{
+  "skills": {
+    "NEWS DIGEST": {
+      "target_agent": "DeepSeek",
+      "priority": "HIGH",
+      "description": "Fetch and reason over daily news for automotive industry."
+    },
+    "DB-R1 RENDER": {
+      "target_agent": "OpenClaw",
+      "priority": "CRITICAL",
+      "description": "Render Dragonball fanart variations using stable diffusion sub-agents."
+    },
+    "ECS DEPLOY": {
+      "target_agent": "Gemini-Bot",
+      "priority": "HIGH",
+      "description": "Execute local shell scripts to push code to ECS via SSH."
+    }
+  },
+  "version": "1.0",
+  "active_skills_path": "active_skills/"
+}

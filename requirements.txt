@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+websockets
+pytest
+PyYAML
+requests
+websocket-client
+psutil
+discord.py
+python-telegram-bot
