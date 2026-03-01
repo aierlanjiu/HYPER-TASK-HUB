@@ -7,14 +7,14 @@
 <!-- 16:9 主界面效果图占位 -->
 <div align="center">
   <img src="images/banner_16_9.png" width="100%" alt="HyperTask Hub Main Dashboard" />
-  <p><em>(此处建议上传 16:9 的主界面高清截图)</em></p>
+  <p><em>(展示图 1：16:9 主界面高清截图)</em></p>
 </div>
 
 ---
 
 ## ✨ 核心亮点
 
-### 1. 🤖 强力执行者：Gemini Bot
+### 1. 🤖 强力执行者：Gemini Bot (The Executor)
 **Gemini Bot** 是系统中的核心打工人。它不仅拥有极高的逻辑推理能力，更被赋予了**本地系统执行权**。它能通过 CLI 直接操控您的文件系统、运行复杂脚本，并将执行过程实时回传给指挥中心。
 
 ### 2. 👮 督察官：Supervisor Agent (反“磨洋工”系统)
@@ -31,11 +31,37 @@
 
 ---
 
+## 🛠️ 全 Agent 交互协议 (Nexus Protocol V2.1)
+
+为了实现智体间的无缝协同，本项目定义了一套严格的通讯协议，任何接入的特工必须遵守：
+
+### 🔄 任务生命周期
+特工必须严格按照以下状态机上报进度，否则将被 Supervisor 判定为“异常”并介入：
+`PENDING (创建) → RUNNING (执行中) → DONE (成功) / FAILED (失败)`
+
+### 📡 核心 API 规范
+- **进度上报**：`POST /api/v2/tasks/{task_id}/progress` (包含 `progress` 0-100 和 `status`)。
+- **实时步骤**：`POST /api/v2/tasks/{task_id}/steps` (用于拆解执行动作，如“正在搜索资料...”)。
+- **结果广播**：`POST /api/v2/agent-reply` (任务完成后，将最终文字产出推送到看板前端)。
+
+### ⚡ 双向控制流 (WebSocket)
+主管 Agent 通过 `ws://localhost:8000/ws/{agent_id}` 下发控制信号：
+- `SUPERVISE_STALL`: 任务停滞警告，要求特工立即汇报障碍。
+- `STOP_ALL`: 系统级熔断指令。
+
+<!-- 16:9 系统架构逻辑图占位 -->
+<div align="center">
+  <img src="images/architecture_16_9.png" width="100%" alt="Nexus Architecture Protocol" />
+  <p><em>(展示图 2：16:9 系统架构与协议逻辑图)</em></p>
+</div>
+
+---
+
 ## 📸 移动端适配
 <!-- 9:16 移动端/电报端效果图占位 -->
 <div align="center">
   <img src="images/mobile_9_16.png" width="40%" alt="Telegram Monitor View" />
-  <p><em>(此处建议上传 9:16 的 Telegram 机器人或手机浏览器截图)</em></p>
+  <p><em>(展示图 3：9:16 Telegram 监控端截图)</em></p>
 </div>
 
 ---

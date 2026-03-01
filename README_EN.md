@@ -4,10 +4,10 @@
 
 **HyperTask Hub** is a next-generation Multi-Agent orchestration and command system. It seamlessly integrates distinct AI agents (Gemini, DeepSeek, OpenClaw) into a self-correcting "Intelligence Swarm" via a sophisticated Web console.
 
-<!-- 16:9 Desktop Screenshot Placeholder -->
+<!-- 16:9 Main Dashboard Screenshot Placeholder -->
 <div align="center">
   <img src="images/banner_16_9.png" width="100%" alt="HyperTask Hub Main Dashboard" />
-  <p><em>(Recommended: Upload a 16:9 high-res screenshot of the main dashboard here)</em></p>
+  <p><em>(Preview 1: 16:9 High-res Dashboard Screenshot)</em></p>
 </div>
 
 ---
@@ -31,11 +31,37 @@ Features a built-in **DOTA2 Hero Voice Pack system**. Every critical task milest
 
 ---
 
+## 🛠️ Multi-Agent Interaction Protocol (Nexus Protocol V2.1)
+
+To achieve seamless synergy, this project defines a strict communication protocol that every connected agent must follow:
+
+### 🔄 Task Lifecycle
+Agents must report progress using the following state machine, or the Supervisor will intervene:
+`PENDING (Created) → RUNNING (Executing) → DONE (Success) / FAILED (Failure)`
+
+### 📡 Core API Specification
+- **Progress Reporting**: `POST /api/v2/tasks/{task_id}/progress` (includes `progress` 0-100 and `status`).
+- **Live Steps**: `POST /api/v2/tasks/{task_id}/steps` (used to break down actions, e.g., "Searching for data...").
+- **Result Broadcasting**: `POST /api/v2/agent-reply` (pushes final text output to the dashboard frontend upon completion).
+
+### ⚡ Bi-directional Control Flow (WebSocket)
+The Supervisor Agent sends control signals via `ws://localhost:8000/ws/{agent_id}`:
+- `SUPERVISE_STALL`: Stagnation warning, requiring the agent to report obstacles immediately.
+- `STOP_ALL`: System-wide emergency stop command.
+
+<!-- 16:9 System Architecture Diagram Placeholder -->
+<div align="center">
+  <img src="images/architecture_16_9.png" width="100%" alt="Nexus Architecture Protocol" />
+  <p><em>(Preview 2: 16:9 System Architecture and Protocol Logic)</em></p>
+</div>
+
+---
+
 ## 📸 Mobile Synchronization
-<!-- 9:16 Mobile Screenshot Placeholder -->
+<!-- 9:16 Mobile/Telegram Screenshot Placeholder -->
 <div align="center">
   <img src="images/mobile_9_16.png" width="40%" alt="Telegram Monitor View" />
-  <p><em>(Recommended: Upload a 9:16 screenshot of the Telegram Bot or mobile browser here)</em></p>
+  <p><em>(Preview 3: 9:16 Telegram Monitoring Screenshot)</em></p>
 </div>
 
 ---
