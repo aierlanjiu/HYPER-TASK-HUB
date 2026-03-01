@@ -34,7 +34,7 @@
 ## 📺 视频演示 (Video Demo)
 <!-- 视频演示位占位 -->
 <div align="center">
-  <video src="images/demo_video.mp4" width="100%" controls>
+  <video src="images/demo_video.mov" width="100%" controls>
     您的浏览器不支持 video 标签。
   </video>
   <p><em>(演示视频：展示多 Agent 协同及 DOTA2 语音交互实感)</em></p>
