@@ -1,3 +1,7 @@
+<div align="right">
+<strong>简体中文</strong> | <a href="README_en.md">English</a>
+</div>
+
 # 🌐 HyperTask Hub: 多智能体协同编排中枢 (Open Source Edition)
 
 > **"让 Agent 们像交响乐团一样协同工作，拒绝‘磨洋工’，实现真正的自动化闭环。"**
